@@ -5,6 +5,7 @@ import { createDiscreteApi } from 'naive-ui'
 import { useMenuStore } from '@/stores/menu'
 import { useUserStore } from '@/stores/user'
 import type { Menu } from '@/views/system/menu/types'
+import type { ApiResult } from '@/network/types/request'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -73,8 +74,12 @@ router.beforeEach(async (to, _from, next) => {
       next({ ...to, replace: true })
       return
     } catch (error) {
-      console.error(error)
-      next({ name: 'server-error' })
+      const code = (error as ApiResult<null>).code
+      if (code === 401) {
+        next({ name: 'login' })
+      } else {
+        next({ name: 'server-error' })
+      }
       menuStore.loaded = true
       return
     }

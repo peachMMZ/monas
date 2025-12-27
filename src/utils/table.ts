@@ -5,6 +5,7 @@ import {
   NButton,
   NTooltip,
   type PaginationProps,
+  type IconProps,
   createDiscreteApi,
 } from 'naive-ui'
 import type { ApiResult } from '@/network/types/request'
@@ -133,10 +134,15 @@ export function useTable<T extends BaseEntity, Q extends BaseQuery>(fetchData: (
 }
 
 export interface TableAction<T> {
-  label: string
+  label: MaybeFunction<T, string>
   type?: 'default' | 'tertiary' | 'primary' | 'info' | 'success' | 'warning' | 'error'
-  icon: IconName
+  icon: MaybeFunction<T, IconName>
+  iconProps?: MaybeFunction<T, IconProps>
   handler: (row: T, rowIndex: number) => void
+}
+export type MaybeFunction<R, V> = V | ((row: R) => V)
+export function toValueByRow<R, V>(value: MaybeFunction<R, V>, rowData: R): V {
+  return typeof value === 'function' ? (value as (row: R) => V)(rowData) : value
 }
 
 export function handleTableActions<T>(columns: DataTableColumns<T>, actions?: TableAction<T>[]) {
@@ -160,15 +166,15 @@ export function handleTableActions<T>(columns: DataTableColumns<T>, actions?: Ta
                     NButton,
                     {
                       type: action.type,
-                      size: 'tiny',
+                      size: 'small',
                       text: true,
                       onClick: () => action.handler(rowData, rowIndex),
                     },
                     {
-                      icon: renderIcon(action.icon),
+                      icon: renderIcon(toValueByRow(action.icon, rowData), toValueByRow(action.iconProps, rowData)),
                     },
                   ),
-                default: () => action.label,
+                default: () => toValueByRow(action.label, rowData),
               },
             ),
           ),

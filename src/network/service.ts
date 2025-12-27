@@ -38,6 +38,10 @@ export class BaseService<T> {
   public request = request
   constructor(protected prefix: string) {}
 
+  public getPrefix() {
+    return this.prefix
+  }
+
   async list(params?: BaseQuery) {
     return request<T[]>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.list}`,

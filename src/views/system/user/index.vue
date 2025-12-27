@@ -54,8 +54,8 @@ import { userStatusOptions, getColumns, userService } from './service'
 import type { User, UserQuery } from './types'
 import { renderIcon } from '@/utils/renderer'
 import { useTable } from '@/utils/table'
-import TableQuery from '@/components/table/TableQuery'
-import TableToolbar from '@/components/table/TableToolbar'
+import TableQuery from '@/components/Table/TableQuery'
+import TableToolbar from '@/components/Table/TableToolbar'
 
 defineOptions({
   name: 'UserView',

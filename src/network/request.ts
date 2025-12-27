@@ -36,11 +36,11 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.status === UN_AUTHORIZED_CODE) {
-      message.error('未授权')
-      return Promise.reject(new Error('未授权'))
+      message.error('未授权，请登录')
+      return Promise.reject(error?.response?.data)
     } else if (error.status === FORBIDDEN_CODE) {
       message.error('拒绝访问')
-      return Promise.reject(new Error('拒绝访问'))
+      return Promise.reject(error?.response?.data)
     } else if (error.status === SERVER_ERROR_CODE) {
       const msg = error.response?.data?.msg || error.message || '服务器错误'
       message.error(msg)
