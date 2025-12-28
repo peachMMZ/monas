@@ -138,6 +138,7 @@ export interface TableAction<T> {
   type?: 'default' | 'tertiary' | 'primary' | 'info' | 'success' | 'warning' | 'error'
   icon: MaybeFunction<T, IconName>
   iconProps?: MaybeFunction<T, IconProps>
+  loading?: (row: T) => boolean
   handler: (row: T, rowIndex: number) => void
 }
 export type MaybeFunction<R, V> = V | ((row: R) => V)
@@ -168,10 +169,14 @@ export function handleTableActions<T>(columns: DataTableColumns<T>, actions?: Ta
                       type: action.type,
                       size: 'small',
                       text: true,
+                      loading: action.loading?.(rowData) || false,
                       onClick: () => action.handler(rowData, rowIndex),
                     },
                     {
-                      icon: renderIcon(toValueByRow(action.icon, rowData), toValueByRow(action.iconProps, rowData)),
+                      icon: renderIcon(
+                        toValueByRow(action.icon, rowData),
+                        toValueByRow(action.iconProps, rowData),
+                      ),
                     },
                   ),
                 default: () => toValueByRow(action.label, rowData),

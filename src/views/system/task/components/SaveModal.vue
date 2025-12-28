@@ -27,7 +27,7 @@
                   </template>
                 </div>
                 <div v-else>
-                  <n-text>暂无预测结果</n-text>
+                  <span>暂无预测结果</span>
                 </div>
               </n-tooltip>
             </n-input-group>

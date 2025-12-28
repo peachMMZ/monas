@@ -85,29 +85,39 @@ const {
   handleCheckedRowChange,
   deleteAll
 } = useTable<Task, TaskQuery>(fetchData)
+const loading = ref({
+  run: false,
+  toggleEnabled: false
+})
 const columns = getColumns([
   {
     label: '立即运行',
     icon: 'Zap',
-    handler: (row) => {
-      taskService.run(row.id).then((res) => {
-        if (res.code === 200) {
-          message.success('运行成功')
-        } else {
-          message.error(res.msg || '运行失败')
-        }
-      })
+    loading: () => loading.value.run,
+    handler: async (row) => {
+      loading.value.run = true
+      const res = await taskService.run(row.id)
+      loading.value.run = false
+      if (res.code === 200) {
+        message.success('运行成功')
+      } else {
+        message.error(res.msg || '运行失败')
+      }
     }
   },
   {
     label: (row) => row.enabled ? '禁用' : '启用',
     icon: (row) => row.enabled ? 'Ban' : 'Play',
-    handler: (row) => {
-      taskService.toggleEnabled(row).then((res) => {
-        if (res.code === 200) {
-          message.success('操作成功')
-        }
-      })
+    loading: () => loading.value.toggleEnabled,
+    handler: async (row) => {
+      loading.value.toggleEnabled = true
+      const res = await taskService.toggleEnabled(row)
+      loading.value.toggleEnabled = false
+      if (res.code === 200) {
+        message.success('操作成功')
+      } else {
+        message.error(res.msg || '操作失败')
+      }
     }
   },
   {
