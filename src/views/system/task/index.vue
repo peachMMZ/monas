@@ -32,6 +32,7 @@
     </div>
 
     <save-modal v-model:show="saveModalVisible" :data="saveModalData" @success="query" />
+    <log-modal v-model:show="logModalVisible" :task="logModalTask" />
   </div>
 </template>
 
@@ -56,6 +57,7 @@ import TableQuery from '@/components/Table/TableQuery'
 import TableToolbar from '@/components/Table/TableToolbar'
 import type { Task, TaskQuery } from './types'
 import SaveModal from './components/SaveModal.vue'
+import LogModal from './components/LogModal.vue'
 import type { Optional } from '@/utils/type'
 
 defineOptions({
@@ -87,12 +89,14 @@ const {
 } = useTable<Task, TaskQuery>(fetchData)
 const loading = ref({
   run: false,
-  toggleEnabled: false
+  toggleEnabled: false,
+  fetchLogs: false,
 })
 const columns = getColumns([
   {
     label: '立即运行',
     icon: 'Zap',
+    iconProps: { color: 'orange' },
     loading: () => loading.value.run,
     handler: async (row) => {
       loading.value.run = true
@@ -108,6 +112,7 @@ const columns = getColumns([
   {
     label: (row) => row.enabled ? '禁用' : '启用',
     icon: (row) => row.enabled ? 'Ban' : 'Play',
+    iconProps: (row) => ({ color: row.enabled ? 'red' : 'green' }),
     loading: () => loading.value.toggleEnabled,
     handler: async (row) => {
       loading.value.toggleEnabled = true
@@ -123,10 +128,18 @@ const columns = getColumns([
   {
     label: '编辑',
     icon: 'Edit',
+    iconProps: { color: 'dodgerblue' },
     handler: (row) => {
       saveModalData.value = cloneDeep(row)
       saveModalVisible.value = true
     }
+  },
+  {
+    label: '查看日志',
+    icon: 'FileText',
+    iconProps: { color: 'deepskyblue' },
+    loading: () => loading.value.fetchLogs,
+    handler: openLogModal
   }
 ])
 
@@ -142,6 +155,13 @@ function fetchData() {
 function add() {
   saveModalData.value = saveModalDefaultData
   saveModalVisible.value = true
+}
+
+const logModalVisible = ref(false)
+const logModalTask = ref<Task>()
+function openLogModal(task: Task) {
+  logModalTask.value = task
+  logModalVisible.value = true
 }
 
 onMounted(() => {

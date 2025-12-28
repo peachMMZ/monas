@@ -34,7 +34,7 @@ export interface PageResult<T> {
   totalPages: number
 }
 
-export class BaseService<T> {
+export class BaseService<T, Q extends BaseQuery = BaseQuery> {
   public request = request
   constructor(protected prefix: string) {}
 
@@ -42,7 +42,7 @@ export class BaseService<T> {
     return this.prefix
   }
 
-  async list(params?: BaseQuery) {
+  async list(params?: Q) {
     return request<T[]>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.list}`,
       method: 'GET',
@@ -50,7 +50,7 @@ export class BaseService<T> {
     })
   }
 
-  async page(params?: BaseQuery) {
+  async page(params?: Q) {
     return request<PageResult<T>>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.page}`,
       method: 'GET',
@@ -58,7 +58,7 @@ export class BaseService<T> {
     })
   }
 
-  async detail(params?: BaseQuery) {
+  async detail(params?: Q) {
     return request<T>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.detail}`,
       method: 'GET',
@@ -74,7 +74,7 @@ export class BaseService<T> {
     })
   }
 
-  async delete(params?: BaseQuery) {
+  async delete(params?: Q) {
     return request<T>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.delete}`,
       method: 'DELETE',

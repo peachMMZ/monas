@@ -20,3 +20,20 @@ export interface AvailableTaskBean {
   beanName: string
   className: string
 }
+
+export type TaskStatus = 'RUNNING' | 'SUCCESS' | 'FAILED' | 'INTERRUPTED' | 'LOST'
+
+export interface TaskLog extends BaseEntity {
+  taskId: number
+  startTime: string
+  endTime?: string
+  status: TaskStatus
+  duration?: number
+  errorMessage?: string
+}
+
+export interface TaskLogQuery extends BaseQuery {
+  taskId?: number
+  status?: TaskStatus
+  createdDateBetween?: [string, string]
+}

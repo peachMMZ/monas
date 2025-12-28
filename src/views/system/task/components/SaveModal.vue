@@ -1,6 +1,6 @@
 <template>
   <div>
-    <n-modal v-model:show="show" title="保存" draggable preset="card" style="width: 40%">
+    <n-modal v-model:show="show" title="保存" draggable preset="card" style="width: 30%">
       <n-form ref="formRef" :model="formData" :rules="rules">
         <n-grid :x-gap="12">
           <n-form-item-gi :span="18" label="任务名称" path="name">
