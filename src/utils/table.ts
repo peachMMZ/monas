@@ -40,6 +40,7 @@ export type DataRow<T> = T & { editing?: boolean }
 
 export function useTable<T extends BaseEntity, Q extends BaseQuery>(fetchData: () => void) {
   const tableData = ref<T[]>([])
+  const queryFormKey = ref(0) // 用于强制刷新查询表单
   const queryParams = ref<Q>({} as Q)
   const checkedRowKeys = ref<DataTableRowKey[]>([])
   const tableLoading = ref(false)
@@ -89,6 +90,7 @@ export function useTable<T extends BaseEntity, Q extends BaseQuery>(fetchData: (
 
   function reset() {
     queryParams.value = {} as Q
+    queryFormKey.value++
     pagination.value.page = 1
     fetchData()
   }
@@ -120,6 +122,7 @@ export function useTable<T extends BaseEntity, Q extends BaseQuery>(fetchData: (
 
   return {
     tableData,
+    queryFormKey,
     queryParams,
     pagination,
     checkedRowKeys,
