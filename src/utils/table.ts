@@ -142,6 +142,7 @@ export interface TableAction<T> {
   icon: MaybeFunction<T, IconName>
   iconProps?: MaybeFunction<T, IconProps>
   loading?: (row: T) => boolean
+  hidden?: (row: T) => boolean
   handler: (row: T, rowIndex: number) => void
 }
 export type MaybeFunction<R, V> = V | ((row: R) => V)
@@ -160,32 +161,34 @@ export function handleTableActions<T>(columns: DataTableColumns<T>, actions?: Ta
         h(
           'div',
           { class: 'flex gap-x-2' },
-          actions.map((action) =>
-            h(
-              NTooltip,
-              { trigger: 'hover' },
-              {
-                trigger: () =>
-                  h(
-                    NButton,
-                    {
-                      type: action.type,
-                      size: 'small',
-                      text: true,
-                      loading: action.loading?.(rowData) || false,
-                      onClick: () => action.handler(rowData, rowIndex),
-                    },
-                    {
-                      icon: renderIcon(
-                        toValueByRow(action.icon, rowData),
-                        toValueByRow(action.iconProps, rowData),
-                      ),
-                    },
-                  ),
-                default: () => toValueByRow(action.label, rowData),
-              },
+          actions
+            .filter((action) => !action.hidden?.(rowData))
+            .map((action) =>
+              h(
+                NTooltip,
+                { trigger: 'hover' },
+                {
+                  trigger: () =>
+                    h(
+                      NButton,
+                      {
+                        type: action.type,
+                        size: 'small',
+                        text: true,
+                        loading: action.loading?.(rowData) || false,
+                        onClick: () => action.handler(rowData, rowIndex),
+                      },
+                      {
+                        icon: renderIcon(
+                          toValueByRow(action.icon, rowData),
+                          toValueByRow(action.iconProps, rowData),
+                        ),
+                      },
+                    ),
+                  default: () => toValueByRow(action.label, rowData),
+                },
+              ),
             ),
-          ),
         ),
     })
   }

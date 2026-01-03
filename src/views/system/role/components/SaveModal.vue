@@ -8,6 +8,9 @@
         <n-form-item label="角色名称" prop="roleName" path="roleName">
           <n-input v-model:value="formData.roleName" />
         </n-form-item>
+        <n-form-item label="菜单权限" prop="menuScope" path="menuScope">
+          <n-select v-model:value="formData.menuScope" :options="menuScopeOptions" />
+        </n-form-item>
       </n-form>
       <template #action>
         <div class="flex justify-end gap-x-2">
@@ -26,6 +29,7 @@ import {
   NFormItem,
   NInput,
   NButton,
+  NSelect,
   type FormInst,
   type FormRules,
   useMessage
@@ -33,7 +37,7 @@ import {
 import { ref, useTemplateRef } from 'vue'
 import type { SysRole } from '../types'
 import type { Optional } from '@/utils/type'
-import { sysRoleService } from '../service'
+import { sysRoleService, menuScopeOptions } from '../service'
 
 const emit = defineEmits<{
   (e: 'success'): void
@@ -46,6 +50,7 @@ const defaultFormData = (): Optional<SysRole, 'id'> => {
   return {
     roleCode: '',
     roleName: '',
+    menuScope: 'ASSIGNED',
   }
 }
 

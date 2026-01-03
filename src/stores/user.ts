@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import type { User } from '@/views/system/user/types'
+import type { SysUser } from '@/views/system/user/types'
 import { defineStore } from 'pinia'
 import type { LoginResponse } from '@/views/system/login/service'
 import router from '@/router'
@@ -7,7 +7,7 @@ import router from '@/router'
 export const useUserStore = defineStore(
   'user',
   () => {
-    const loginUser = ref<User>()
+    const loginUser = ref<SysUser>()
     const token = ref<string>()
     const logined = computed(() => loginUser.value && token.value)
 

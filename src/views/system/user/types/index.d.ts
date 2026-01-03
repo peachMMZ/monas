@@ -2,7 +2,7 @@ import type { BaseEntity, BaseQuery } from '@/network/service'
 
 export type UserStatus = 'ACTIVE' | 'DISABLED' | 'WAITING_EMAIL_VERIFICATION'
 
-export interface User extends BaseEntity {
+export interface SysUser extends BaseEntity {
   account: string
   password?: string
   nickname: string
@@ -11,9 +11,10 @@ export interface User extends BaseEntity {
   builtin: boolean
   roleCodes?: string[]
   apiCodes?: string[]
+  roleIds?: number[]
 }
 
-export interface UserQuery extends BaseQuery {
+export interface SysUserQuery extends BaseQuery {
   account?: string
   email?: string
   nickname?: string

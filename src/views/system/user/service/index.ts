@@ -1,7 +1,7 @@
 import { h } from 'vue'
 import { BaseService } from '@/network/service'
 import { NTag, type DataTableColumns } from 'naive-ui'
-import type { User } from '../types'
+import type { SysUser } from '../types'
 import { handleTableActions, type TableAction } from '@/utils/table'
 
 export const userStatusOptions = [
@@ -19,21 +19,31 @@ export const userStatusOptions = [
   },
 ]
 
-export class UserService extends BaseService<User> {
+export class UserService extends BaseService<SysUser> {
   constructor() {
     super('/sys/user')
   }
+
+  async updateStatus(userId: number, status: SysUser['status']) {
+    return this.request<null>({
+      method: 'POST',
+      url: `/sys/user/${userId}/status`,
+      data: {
+        status,
+      },
+    })
+  }
 }
 
-export const userService = new UserService()
+export const sysUserService = new UserService()
 
-export function getColumns(actions?: TableAction<User>[]): DataTableColumns<User> {
-  const columns: DataTableColumns<User> = [
+export function getColumns(actions?: TableAction<SysUser>[]): DataTableColumns<SysUser> {
+  const columns: DataTableColumns<SysUser> = [
     { type: 'selection' },
     {
       title: '序号',
       key: 'seq',
-      render: (_rowData: User, rowIndex: number) => rowIndex + 1,
+      render: (_rowData: SysUser, rowIndex: number) => rowIndex + 1,
     },
     { title: '账号', key: 'account' },
     { title: '昵称', key: 'nickname' },
@@ -41,7 +51,7 @@ export function getColumns(actions?: TableAction<User>[]): DataTableColumns<User
     {
       title: '是否内置',
       key: 'builtin',
-      render: (rowData: User) =>
+      render: (rowData: SysUser) =>
         h(
           NTag,
           { type: rowData.builtin ? 'success' : 'error', size: 'small' },
@@ -51,7 +61,7 @@ export function getColumns(actions?: TableAction<User>[]): DataTableColumns<User
     {
       title: '状态',
       key: 'status',
-      render: (rowData: User) =>
+      render: (rowData: SysUser) =>
         h(
           NTag,
           { type: rowData.status === 'ACTIVE' ? 'success' : 'error', size: 'small' },

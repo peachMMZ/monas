@@ -26,6 +26,7 @@
     </div>
 
     <save-modal ref="saveModalRef" @success="query" />
+    <menu-modal ref="menuModalRef" />
   </div>
 </template>
 
@@ -48,6 +49,7 @@ import { cloneDeep } from 'es-toolkit'
 import type { SysRole, SysRoleQuery } from './types'
 import { renderIcon } from '@/utils/renderer'
 import SaveModal from './components/SaveModal.vue'
+import MenuModal from './components/MenuModal.vue'
 
 defineOptions({
   name: 'RoleIndex',
@@ -80,15 +82,20 @@ const columns = getColumns([
     label: '分配菜单',
     type: 'warning',
     icon: 'Menu',
+    hidden: (row) => row.menuScope === 'ALL',
     handler: (row) => {
-      console.log(row)
+      assignMenu(row)
     }
   }
 ])
 
 function fetchData() {
   tableLoading.value = true
-  sysRoleService.page(queryParams.value).then((res) => {
+  sysRoleService.page({
+    ...queryParams.value,
+    sortBy: 'createdDate',
+    order: 'desc'
+  }).then((res) => {
     handleFetchSuccess(res)
   }).finally(() => {
     tableLoading.value = false
@@ -99,6 +106,11 @@ const saveModalRef = useTemplateRef('saveModalRef')
 
 function add() {
   saveModalRef.value?.open()
+}
+
+const menuModalRef = useTemplateRef('menuModalRef')
+function assignMenu(row: SysRole) {
+  menuModalRef.value?.open(row)
 }
 
 onMounted(() => {

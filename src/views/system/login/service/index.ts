@@ -28,6 +28,7 @@ export interface LoginResponse {
     menus: string[]
     nickname: string
     roles: string[]
+    builtin: boolean
   }
 }
 

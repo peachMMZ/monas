@@ -4,11 +4,13 @@
     <n-global-style />
     <n-message-provider>
       <n-modal-provider>
-        <n-loading-bar-provider>
-          <div class="h-screen">
-            <router-view />
-          </div>
-        </n-loading-bar-provider>
+        <n-dialog-provider>
+          <n-loading-bar-provider>
+            <div class="h-screen">
+              <router-view />
+            </div>
+          </n-loading-bar-provider>
+        </n-dialog-provider>
       </n-modal-provider>
     </n-message-provider>
   </n-config-provider>
@@ -21,6 +23,7 @@ import {
   NGlobalStyle,
   NMessageProvider,
   NModalProvider,
+  NDialogProvider,
   NLoadingBarProvider,
   zhCN,
   dateZhCN,
