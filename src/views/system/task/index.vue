@@ -88,20 +88,19 @@ const {
   deleteAll
 } = useTable<Task, TaskQuery>(fetchData)
 const loading = ref({
-  run: false,
-  toggleEnabled: false,
-  fetchLogs: false,
+  run: new Array<number>(),
+  toggleEnabled: new Array<number>(),
 })
 const columns = getColumns([
   {
     label: '立即运行',
     icon: 'Zap',
     iconProps: { color: 'orange' },
-    loading: () => loading.value.run,
+    loading: (row) => loading.value.run.includes(row.id),
     handler: async (row) => {
-      loading.value.run = true
+      loading.value.run.push(row.id)
       const res = await taskService.run(row.id)
-      loading.value.run = false
+      loading.value.run = loading.value.run.filter((id) => id !== row.id)
       if (res.code === 200) {
         message.success('运行成功')
       } else {
@@ -113,11 +112,11 @@ const columns = getColumns([
     label: (row) => row.enabled ? '禁用' : '启用',
     icon: (row) => row.enabled ? 'Ban' : 'Play',
     iconProps: (row) => ({ color: row.enabled ? 'red' : 'green' }),
-    loading: () => loading.value.toggleEnabled,
+    loading: (row) => loading.value.toggleEnabled.includes(row.id),
     handler: async (row) => {
-      loading.value.toggleEnabled = true
+      loading.value.toggleEnabled.push(row.id)
       const res = await taskService.toggleEnabled(row)
-      loading.value.toggleEnabled = false
+      loading.value.toggleEnabled = loading.value.toggleEnabled.filter((id) => id !== row.id)
       if (res.code === 200) {
         message.success('操作成功')
       } else {
@@ -138,7 +137,6 @@ const columns = getColumns([
     label: '查看日志',
     icon: 'FileText',
     iconProps: { color: 'deepskyblue' },
-    loading: () => loading.value.fetchLogs,
     handler: openLogModal
   }
 ])
