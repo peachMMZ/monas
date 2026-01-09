@@ -9,6 +9,7 @@ export interface SysUser extends BaseEntity {
   email: string
   status: UserStatus
   builtin: boolean
+  avatar?: string
   roleCodes?: string[]
   apiCodes?: string[]
   roleIds?: number[]

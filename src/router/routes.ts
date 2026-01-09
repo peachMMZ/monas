@@ -32,6 +32,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/system/login/index.vue'),
   },
   {
+    path: '/profile',
+    name: 'profile',
+    meta: {
+      title: '个人中心',
+      icon: 'User',
+      hidden: true,
+    },
+    component: () => import('@/views/profile/index.vue'),
+  },
+  {
     path: '/500',
     name: 'server-error',
     meta: {

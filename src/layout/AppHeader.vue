@@ -15,7 +15,11 @@
       <n-button :focusable="false" text :render-icon="renderIcon(Palette)"></n-button>
       <n-dropdown :options="avatarOptions" size="small" @select="onAvatarSelect">
         <n-element class="user-info flex items-center gap-x-2 cursor-pointer rounded-md m-1 p-1">
-          <n-avatar src="/image/avatar.jpeg" round />
+          <file-wrapper :file-id="userStore.loginUser?.avatar">
+            <template #default="{ fileUrl }">
+              <n-avatar :src="fileUrl" round />
+            </template>
+          </file-wrapper>
           <div class="flex flex-col justify-center items-end text-xs">
             <n-text>{{ userStore.loginUser?.nickname }}</n-text>
             <n-text type="primary">信息部</n-text>
@@ -41,9 +45,10 @@ import {
   Building,
 } from 'lucide-vue-next'
 import { renderIcon } from '@/utils/renderer'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useThemeStore } from '@/stores/theme'
+import FileWrapper from '@/components/File/FileWrapper'
 
 const emits = defineEmits<{
   (e: 'collapse', collapsed: boolean): void
@@ -53,6 +58,7 @@ const userStore = useUserStore()
 const message = useMessage()
 const themeStore = useThemeStore()
 
+const router = useRouter()
 const route = useRoute()
 const matchedRoutes = computed(() => route.matched.filter((r) => r.meta && r.meta.title))
 
@@ -71,6 +77,9 @@ const avatarOptions: (DropdownOption & { action?: () => void })[] = [
     key: 'profile',
     label: '个人中心',
     icon: renderIcon(UserCircle),
+    action: () => {
+      router.push({ name: 'profile' })
+    }
   },
   {
     key: 'switch-department',

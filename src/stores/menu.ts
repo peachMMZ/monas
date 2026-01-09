@@ -48,6 +48,7 @@ export const useMenuStore = defineStore('menu', () => {
     if (ignorePaths.includes(path)) return
     const tabExists = tabs.value.some((tab) => tab.path === path)
     const route = router.getRoutes().find((item) => item.path === path)
+    if (!route || route.meta.hidden) return
     if (!tabExists) {
       tabs.value.push({
         label: route?.meta?.title || '未命名页面',
