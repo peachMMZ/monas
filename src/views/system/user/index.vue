@@ -1,7 +1,8 @@
 <template>
   <div class="h-full flex flex-col gap-y-1">
     <TableQuery>
-      <n-form :model="queryParams" ref="queryParamsRef" size="small" label-placement="left" label-width="80px">
+      <n-form :key="queryFormKey" :model="queryParams" ref="queryParamsRef" size="small" label-placement="left"
+        label-width="80px">
         <n-grid :x-gap="24">
           <n-form-item-gi :span="6" label="账号">
             <n-input v-model:value="queryParams.account" clearable />
@@ -80,6 +81,7 @@ const {
   rowKey,
   tableData,
   queryParams,
+  queryFormKey,
   checkedRowKeys,
   tableLoading,
   pagination,

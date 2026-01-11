@@ -16,7 +16,7 @@ const props = defineProps<{
 const fileUrl = ref('')
 async function fetchFileUrl() {
   if (!props.fileId) {
-    fileUrl.value = ''
+    fileUrl.value = '/image/avatar.svg'
     return
   }
   const res = await fileService.url(props.fileId)

@@ -1,8 +1,9 @@
 import { h } from 'vue'
 import { BaseService } from '@/network/service'
-import { NTag, type DataTableColumns } from 'naive-ui'
+import { NTag, NAvatar, type DataTableColumns } from 'naive-ui'
 import type { SysUser } from '../types'
 import { handleTableActions, type TableAction } from '@/utils/table'
+import FileWrapper from '@/components/File/FileWrapper'
 
 export const userStatusOptions = [
   {
@@ -44,6 +45,23 @@ export function getColumns(actions?: TableAction<SysUser>[]): DataTableColumns<S
       title: '序号',
       key: 'seq',
       render: (_rowData: SysUser, rowIndex: number) => rowIndex + 1,
+    },
+    {
+      title: '头像',
+      key: 'avatar',
+      render: (rowData) =>
+        h(
+          FileWrapper,
+          { fileId: rowData.avatar },
+          {
+            default: ({ fileUrl }: { fileUrl: string }) =>
+              h(
+                NAvatar,
+                { src: fileUrl, size: 'small' },
+                { default: () => (rowData.avatar ? undefined : rowData.nickname) },
+              ),
+          },
+        ),
     },
     { title: '账号', key: 'account' },
     { title: '昵称', key: 'nickname' },

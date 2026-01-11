@@ -17,7 +17,7 @@
         <n-element class="user-info flex items-center gap-x-2 cursor-pointer rounded-md m-1 p-1">
           <file-wrapper :file-id="userStore.loginUser?.avatar">
             <template #default="{ fileUrl }">
-              <n-avatar :src="fileUrl" round />
+              <n-avatar :src="fileUrl" />
             </template>
           </file-wrapper>
           <div class="flex flex-col justify-center items-end text-xs">
@@ -47,6 +47,7 @@ import {
 import { renderIcon } from '@/utils/renderer'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useMenuStore } from '@/stores/menu'
 import { useThemeStore } from '@/stores/theme'
 import FileWrapper from '@/components/File/FileWrapper'
 
@@ -55,6 +56,7 @@ const emits = defineEmits<{
 }>()
 
 const userStore = useUserStore()
+const menuStore = useMenuStore()
 const message = useMessage()
 const themeStore = useThemeStore()
 
@@ -93,6 +95,7 @@ const avatarOptions: (DropdownOption & { action?: () => void })[] = [
     icon: renderIcon(LogOut),
     action: () => {
       userStore.clearLogin()
+      menuStore.loaded = false
       message.success('退出成功')
     }
   },
