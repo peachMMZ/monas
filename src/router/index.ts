@@ -1,7 +1,6 @@
 import type { Component } from 'vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import routes from './routes'
-import { createDiscreteApi } from 'naive-ui'
 import { useMenuStore } from '@/stores/menu'
 import { useUserStore } from '@/stores/user'
 import type { Menu } from '@/views/system/menu/types'
@@ -15,8 +14,6 @@ declare module 'vue-router' {
     sort?: number
   }
 }
-
-const { loadingBar } = createDiscreteApi(['loadingBar'])
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,7 +52,6 @@ function menuToRoute(menu: Menu): RouteRecordRaw {
 }
 
 router.beforeEach(async (to, _from, next) => {
-  loadingBar.start()
   const userStore = useUserStore()
   if (!userStore.logined) {
     if (WHITE_LIST.includes(to.path)) {
@@ -90,10 +86,6 @@ router.beforeEach(async (to, _from, next) => {
       next({ name: 'not-found' })
     }
   }
-})
-
-router.afterEach((_to, _from) => {
-  loadingBar.finish()
 })
 
 export default router
