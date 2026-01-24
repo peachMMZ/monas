@@ -12,7 +12,8 @@
     <div class="flex justify-end items-center gap-x-4">
       <n-button :focusable="false" text :render-icon="renderIcon(themeIcon)" @click="themeStore.switchTheme"></n-button>
       <n-button :focusable="false" text :render-icon="renderIcon(MessageCircle)"></n-button>
-      <n-button :focusable="false" text :render-icon="renderIcon(Palette)"></n-button>
+      <n-button :focusable="false" text :render-icon="renderIcon(Palette)"
+        @click="themeStore.themeDrawerShow = true"></n-button>
       <n-dropdown :options="avatarOptions" size="small" @select="onAvatarSelect">
         <n-element class="user-info flex items-center gap-x-2 cursor-pointer rounded-md m-1 p-1">
           <file-wrapper :file-id="userStore.loginUser?.avatar">

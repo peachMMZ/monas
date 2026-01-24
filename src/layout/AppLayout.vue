@@ -1,7 +1,8 @@
 <template>
   <div class="h-full">
     <n-layout class="h-full" has-sider>
-      <n-layout-sider bordered :collapsed="collapsed" collapse-mode="width" :collapsed-width="64">
+      <n-layout-sider bordered :collapsed="collapsed" :inverted="themeStore.siderInverted" collapse-mode="width"
+        :collapsed-width="64">
         <div class="h-full flex flex-col overflow-x-hidden">
           <app-logo class="h-12 app-logo" :collapsed="collapsed" />
           <app-menu :collapsed="collapsed" />
@@ -21,6 +22,7 @@
         </n-layout-content>
       </n-layout>
     </n-layout>
+    <app-theme-drawer />
   </div>
 </template>
 
@@ -31,6 +33,10 @@ import AppLogo from '@/layout/AppLogo.vue'
 import AppMenu from '@/layout/AppMenu.vue'
 import AppHeader from '@/layout/AppHeader.vue'
 import AppTab from '@/layout/AppTab.vue'
+import AppThemeDrawer from '@/layout/AppThemeDrawer.vue'
+import { useThemeStore } from '@/stores/theme'
+
+const themeStore = useThemeStore()
 
 const collapsed = ref(false)
 </script>

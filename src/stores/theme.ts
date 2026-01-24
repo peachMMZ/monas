@@ -22,8 +22,11 @@ export const useThemeStore = defineStore(
     const theme = ref<Theme>('light')
     const followOsTheme = ref(true)
     const themeOverride = ref<GlobalThemeOverrides>(defaultThemeOverride())
+    const themeDrawerShow = ref(false)
+    const siderInverted = ref(false)
 
     const init = async () => {
+      themeDrawerShow.value = false
       watch(
         () => ({
           theme: theme.value,
@@ -38,6 +41,13 @@ export const useThemeStore = defineStore(
         },
         { deep: true },
       )
+    }
+
+    const rollbackTheme = () => {
+      followOsTheme.value = true
+      themeOverride.value = defaultThemeOverride()
+      setFontSize(14)
+      siderInverted.value = false
     }
 
     const switchTheme = () => {
@@ -59,13 +69,25 @@ export const useThemeStore = defineStore(
       themeOverride.value.common.primaryColorSuppl = suppl
     }
 
+    const setFontSize = (size: number | null) => {
+      if (!size) return
+      if (!themeOverride.value.common) {
+        themeOverride.value.common = {}
+      }
+      themeOverride.value.common.fontSize = `${size}px`
+    }
+
     return {
       theme,
       followOsTheme,
       themeOverride,
+      themeDrawerShow,
+      siderInverted,
       init,
+      rollbackTheme,
       switchTheme,
       setPrimaryColor,
+      setFontSize,
     }
   },
   { persist: true },
