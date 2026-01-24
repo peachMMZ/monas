@@ -96,6 +96,7 @@ const avatarOptions: (DropdownOption & { action?: () => void })[] = [
     icon: renderIcon(LogOut),
     action: () => {
       userStore.clearLogin()
+      menuStore.removeAllTabs()
       menuStore.loaded = false
       message.success('退出成功')
     }
