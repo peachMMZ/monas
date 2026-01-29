@@ -16,7 +16,11 @@
           <div class="h-full flex flex-col overflow-hidden">
             <app-tab />
             <div class="flex-1 p-1 overflow-auto">
-              <router-view />
+              <router-view #default="{ Component }">
+                <keep-alive :include="menuStore.keepAliveRoutes">
+                  <component :is="Component" />
+                </keep-alive>
+              </router-view>
             </div>
           </div>
         </n-layout-content>
@@ -35,8 +39,10 @@ import AppHeader from '@/layout/AppHeader.vue'
 import AppTab from '@/layout/AppTab.vue'
 import AppThemeDrawer from '@/layout/AppThemeDrawer.vue'
 import { useThemeStore } from '@/stores/theme'
+import { useMenuStore } from '@/stores/menu'
 
 const themeStore = useThemeStore()
+const menuStore = useMenuStore()
 
 const collapsed = ref(false)
 </script>

@@ -18,8 +18,11 @@
           <n-form-item-gi :span="12" label="菜单名称" path="name">
             <n-input v-model:value="formData.name" />
           </n-form-item-gi>
-          <n-form-item-gi :span="12" label="是否启用" path="enabled">
+          <n-form-item-gi :span="6" label="是否启用" path="enabled">
             <n-switch v-model:value="formData.enabled" />
+          </n-form-item-gi>
+          <n-form-item-gi v-if="formData.component" :span="6" label="是否缓存" path="keepAlive">
+            <n-switch v-model:value="formData.keepAlive" />
           </n-form-item-gi>
           <n-form-item-gi :span="24" label="菜单路径" path="path">
             <n-input v-model:value="formData.path" />
@@ -31,8 +34,8 @@
       </n-form>
       <template #action>
         <div class="flex justify-end gap-x-2">
-          <n-button type="primary" :loading="saving" @click="save">保存</n-button>
           <n-button @click="cancel">取消</n-button>
+          <n-button type="primary" :loading="saving" @click="save">保存</n-button>
         </div>
       </template>
     </n-card>

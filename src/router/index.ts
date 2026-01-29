@@ -12,6 +12,8 @@ declare module 'vue-router' {
     icon?: string | Component
     hidden?: boolean
     sort?: number
+    keepAlive?: boolean
+    componentPath?: string
   }
 }
 
@@ -45,6 +47,10 @@ function menuToRoute(menu: Menu): RouteRecordRaw {
     meta: {
       title: menu.name,
       icon: menu.icon,
+      hidden: !menu.enabled,
+      sort: menu.sort,
+      keepAlive: menu.keepAlive,
+      componentPath: menu.component || undefined,
     },
     component: menu.component ? views[menu.component] : undefined,
     children: [],

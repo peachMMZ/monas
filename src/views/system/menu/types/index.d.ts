@@ -9,6 +9,7 @@ export interface Menu {
   icon?: string
   component?: string | null
   sort?: number
+  keepAlive?: boolean
   parentId?: number | null
   children?: Menu[]
 }

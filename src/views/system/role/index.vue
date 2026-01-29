@@ -52,7 +52,7 @@ import SaveModal from './components/SaveModal.vue'
 import MenuModal from './components/MenuModal.vue'
 
 defineOptions({
-  name: 'RoleIndex',
+  name: 'RoleView',
 })
 
 const {

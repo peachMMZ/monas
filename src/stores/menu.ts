@@ -1,7 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import type { Tab } from './types/menu'
 import { defineStore } from 'pinia'
-import router from '@/router'
+import router, { views } from '@/router'
 import { menuService } from '@/views/system/menu/service'
 import type { Menu } from '@/views/system/menu/types'
 
@@ -12,16 +12,19 @@ const ignorePaths = ['/', '/home', '/404', '/login']
 export const useMenuStore = defineStore('menu', () => {
   const loaded = ref(false)
   const current = computed(() => router.currentRoute.value.path)
-  watch(
-    () => current.value,
-    (path) => {
-      addTab(path)
-    },
-    { immediate: true },
-  )
 
   const menus = ref<Menu[]>([])
   const tabs = ref<Tab[]>([])
+  const keepAliveRoutes = ref<string[]>([])
+
+  watch(
+    [current, tabs],
+    ([path, tabs]) => {
+      addTab(path)
+      updateKeepAliveRoutes(tabs)
+    },
+    { immediate: true },
+  )
 
   async function init() {
     loaded.value = false
@@ -41,6 +44,26 @@ export const useMenuStore = defineStore('menu', () => {
     const route = menus.value.find((item) => item.path === key)
     if (route && route.component) {
       router.push(key)
+    }
+  }
+
+  async function updateKeepAliveRoutes(tabs: Tab[]) {
+    const paths = tabs.map((tab) => tab.path)
+    const names = await Promise.all(paths.map(getComponentName))
+    keepAliveRoutes.value = names.filter((name) => name !== undefined)
+  }
+
+  async function getComponentName(path: string) {
+    const route = router.getRoutes().find((item) => item.path === path)
+    if (!route) return
+    // 缓存路由组件
+    if (route.meta.keepAlive && route.meta.componentPath) {
+      const component = views[route.meta.componentPath]
+      if (component) {
+        const mod = await component()
+        const componentName = (mod as { default: { name: string } }).default.name
+        return componentName
+      }
     }
   }
 
@@ -83,6 +106,7 @@ export const useMenuStore = defineStore('menu', () => {
     current,
     menus,
     tabs,
+    keepAliveRoutes,
     init,
     fetchMenus,
     onMenuSelect,
