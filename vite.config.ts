@@ -10,7 +10,11 @@ import { ServerResponse } from 'node:http'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   return {
-    plugins: [vue(), vueDevTools({ launchEditor: 'trae' }), tailwindcss()],
+    plugins: [
+      vue(),
+      vueDevTools({ launchEditor: env.VITE_DEV_TOOLS_LAUNCH_EDITOR }),
+      tailwindcss(),
+    ],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
