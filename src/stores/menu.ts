@@ -98,8 +98,9 @@ export const useMenuStore = defineStore('menu', () => {
   }
 
   function removeAllTabs() {
-    tabs.value = []
-    router.push('/home')
+    router.push('/home').then(() => {
+      tabs.value = []
+    })
   }
 
   function removeOtherTabs(path: string) {

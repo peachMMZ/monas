@@ -1,6 +1,6 @@
 <template>
   <div class="w-full flex justify-between">
-    <div class="w-[calc(100%-3rem)]">
+    <div class="w-full">
       <n-tabs :value="menuStore.current" type="card" size="small" :tabs-padding="4" @update:value="$router.push"
         @close="menuStore.removeTab">
         <n-tab name="/home">首页</n-tab>
@@ -13,19 +13,21 @@
           </n-icon>
           <span>{{ tab.label }}</span>
         </n-tab>
+        <template #suffix>
+          <div class="pr-2">
+            <n-dropdown :options="options" size="small" @select="onDropdownSelect">
+              <n-button type="primary" quaternary size="small" :render-icon="renderIcon(CircleChevronDown)"></n-button>
+            </n-dropdown>
+          </div>
+        </template>
       </n-tabs>
-    </div>
-    <div class="w-12 flex justify-center items-center" :style="{ borderLeft: `1px solid ${themeVars.borderColor}` }">
-      <n-dropdown :options="options" size="small" @select="onDropdownSelect">
-        <n-button text size="small" :render-icon="renderIcon(MoreHorizontal)"></n-button>
-      </n-dropdown>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { NTabs, NTab, NButton, NDropdown, NIcon, useThemeVars } from 'naive-ui'
-import { MoreHorizontal, CircleX, SquareX, Clock } from 'lucide-vue-next'
+import { CircleChevronDown, CircleX, SquareX, Clock } from 'lucide-vue-next'
 import { renderIcon } from '@/utils/renderer'
 import { useMenuStore } from '@/stores/menu'
 import LucideIcon from '@/components/LucideIcon'
