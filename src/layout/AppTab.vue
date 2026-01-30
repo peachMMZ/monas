@@ -4,9 +4,15 @@
       <n-tabs :value="menuStore.current" type="card" size="small" :tabs-padding="4" @update:value="$router.push"
         @close="menuStore.removeTab">
         <n-tab name="/home">首页</n-tab>
-        <n-tab v-for="tab in menuStore.tabs" closable :key="tab.path" :name="tab.path">{{
-          tab.label
-        }}</n-tab>
+        <n-tab v-for="tab in menuStore.tabs" closable :key="tab.path" :name="tab.path">
+          <n-icon v-if="tab.icon">
+            <lucide-icon v-if="typeof tab.icon === 'string'" :name="tab.icon" />
+            <template v-else>
+              <component :is="tab.icon" />
+            </template>
+          </n-icon>
+          <span>{{ tab.label }}</span>
+        </n-tab>
       </n-tabs>
     </div>
     <div class="w-12 flex justify-center items-center" :style="{ borderLeft: `1px solid ${themeVars.borderColor}` }">
@@ -18,10 +24,11 @@
 </template>
 
 <script setup lang="ts">
-import { NTabs, NTab, NButton, NDropdown, useThemeVars } from 'naive-ui'
+import { NTabs, NTab, NButton, NDropdown, NIcon, useThemeVars } from 'naive-ui'
 import { MoreHorizontal, CircleX, SquareX, Clock } from 'lucide-vue-next'
 import { renderIcon } from '@/utils/renderer'
 import { useMenuStore } from '@/stores/menu'
+import LucideIcon from '@/components/LucideIcon'
 
 const themeVars = useThemeVars()
 const menuStore = useMenuStore()

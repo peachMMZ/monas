@@ -34,8 +34,8 @@
       </n-form>
       <template #action>
         <div class="flex justify-end gap-x-2">
-          <n-button @click="cancel">取消</n-button>
           <n-button type="primary" :loading="saving" @click="save">保存</n-button>
+          <n-button @click="cancel">取消</n-button>
         </div>
       </template>
     </n-card>

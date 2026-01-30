@@ -53,7 +53,9 @@ export const useMenuStore = defineStore('menu', () => {
     keepAliveRoutes.value = names.filter((name) => name !== undefined)
   }
 
+  const componentNameCacheMap = new Map<string, string>()
   async function getComponentName(path: string) {
+    if (componentNameCacheMap.has(path)) return componentNameCacheMap.get(path)
     const route = router.getRoutes().find((item) => item.path === path)
     if (!route) return
     // 缓存路由组件
@@ -62,6 +64,7 @@ export const useMenuStore = defineStore('menu', () => {
       if (component) {
         const mod = await component()
         const componentName = (mod as { default: { name: string } }).default.name
+        componentNameCacheMap.set(path, componentName)
         return componentName
       }
     }
@@ -76,6 +79,8 @@ export const useMenuStore = defineStore('menu', () => {
       tabs.value.push({
         label: route?.meta?.title || '未命名页面',
         path: path,
+        icon: route?.meta?.icon,
+        cached: route?.meta?.keepAlive,
       })
     }
   }
