@@ -17,9 +17,11 @@
             <app-tab />
             <div class="flex-1 p-1 overflow-auto">
               <router-view #default="{ Component }">
-                <keep-alive :include="menuStore.keepAliveRoutes">
-                  <component :is="Component" />
-                </keep-alive>
+                <transition name="page" mode="out-in">
+                  <keep-alive :include="menuStore.keepAliveRoutes">
+                    <component :is="Component" />
+                  </keep-alive>
+                </transition>
               </router-view>
             </div>
           </div>
@@ -49,5 +51,28 @@ const collapsed = ref(false)
 <style scoped>
 .app-logo {
   border-bottom: 1px solid var(--n-border-color);
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity, filter;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform:
+    perspective(1200px) translateY(18px) scale(0.96);
+  filter: blur(4px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform:
+    perspective(1200px) translateY(-12px) scale(1.02);
+  filter: blur(2px);
 }
 </style>
