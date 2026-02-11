@@ -1,7 +1,7 @@
 import { BaseService } from '@/network/service'
 import type { Person } from '../types'
 import { handleTableActions, type TableAction } from '@/utils/table'
-import { NTag, type DataTableColumns } from 'naive-ui'
+import { NTag, type TagProps, type DataTableColumns } from 'naive-ui'
 import { h } from 'vue'
 
 export const enabledOptions = [
@@ -31,8 +31,25 @@ export function getColumns(actions?: TableAction<Person>[]): DataTableColumns<Pe
     },
     { title: '姓名', key: 'name' },
     { title: '工号', key: 'code' },
-    { title: '类型', key: 'type' },
-    { title: '邮箱', key: 'email' },
+    {
+      title: '类型',
+      key: 'type',
+      render: (rowData) => {
+        const label = personTypes.find((item) => item.value === rowData.type)?.label || '-'
+        let type: TagProps['type'] = 'primary'
+        if (rowData.type === 'EMPLOYEE') {
+          type = 'success'
+        } else if (rowData.type === 'INTERN') {
+          type = 'info'
+        } else if (rowData.type === 'CONTRACTOR') {
+          type = 'warning'
+        } else if (rowData.type === 'TEMPORARY') {
+          type = 'error'
+        }
+        return h(NTag, { type, size: 'small' }, { default: () => label })
+      },
+    },
+    { title: '邮箱', key: 'email', width: 200 },
     { title: '手机号', key: 'mobile' },
     {
       title: '是否启用',
