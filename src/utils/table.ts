@@ -6,15 +6,13 @@ import {
   NTooltip,
   type PaginationProps,
   type IconProps,
-  createDiscreteApi,
 } from 'naive-ui'
 import type { ApiResult } from '@/network/types/request'
 import { BaseService, type BaseEntity, type BaseQuery } from '@/network/service'
 import type { PageResult } from '@/network/service'
 import type { IconName } from '@/components/LucideIcon'
 import { renderIcon } from './renderer'
-
-const { message, dialog } = createDiscreteApi(['message', 'dialog'])
+import { Feedback } from './feedback'
 
 type SimplePaginationProps = Pick<
   PaginationProps,
@@ -96,6 +94,7 @@ export function useTable<T extends BaseEntity, Q extends BaseQuery>(fetchData: (
   }
 
   function deleteAll(service: BaseService<T>) {
+    const { message, dialog } = Feedback.getInstance()
     if (checkedRowKeys.value.length > 0) {
       dialog.warning({
         title: '删除确认',

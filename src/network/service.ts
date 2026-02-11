@@ -66,6 +66,13 @@ export class BaseService<T, Q extends BaseQuery = BaseQuery> {
     })
   }
 
+  async get(id: Q['id']) {
+    return request<T>({
+      url: `${this.prefix}/${id}`,
+      method: 'GET',
+    })
+  }
+
   async save<D = T>(data: D) {
     return request<T>({
       url: `${this.prefix}${DEFAULT_ENDPOINTS.save}`,
