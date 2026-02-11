@@ -3,7 +3,7 @@
     <n-split :default-size="0.2" pane1-class="mr-1" pane2-class="ml-1" :min="0.2" :max="0.5">
       <template #1>
         <n-card class="h-full" title="组织">
-
+          <org-tree @update:selected-keys="onOrgSelected" />
         </n-card>
       </template>
       <template #2>
@@ -68,9 +68,11 @@ import TableQuery from '@/components/Table/TableQuery'
 import TableToolbar from '@/components/Table/TableToolbar'
 import { renderIcon } from '@/utils/renderer'
 import SaveModal from './components/SaveModal.vue'
+import OrgTree from './components/OrgTree.vue'
 import type { Optional } from '@/utils/type'
 import dayjs from 'dayjs'
 import { cloneDeep } from 'es-toolkit'
+import { Feedback } from '@/utils/feedback'
 
 defineOptions({
   name: 'PersonView'
@@ -125,6 +127,12 @@ const saveModalData = ref(defaultSaveModalData())
 function add() {
   saveModalData.value = defaultSaveModalData()
   saveModalVisible.value = true
+}
+
+function onOrgSelected(keys: number[]) {
+  // TODO 处理选中的组织单位
+  const { message } = Feedback.getInstance()
+  message.success(`选中的组织单位：${keys.join('、')}`)
 }
 
 onMounted(() => {

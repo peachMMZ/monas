@@ -27,13 +27,15 @@ export function getColumns(actions?: TableAction<Person>[]): DataTableColumns<Pe
     {
       title: '序号',
       key: 'seq',
+      resizable: true,
       render: (_rowData, rowIndex) => rowIndex + 1,
     },
-    { title: '姓名', key: 'name' },
-    { title: '工号', key: 'code' },
+    { title: '姓名', key: 'name', resizable: true },
+    { title: '工号', key: 'code', resizable: true },
     {
       title: '类型',
       key: 'type',
+      resizable: true,
       render: (rowData) => {
         const label = personTypes.find((item) => item.value === rowData.type)?.label || '-'
         let type: TagProps['type'] = 'primary'
@@ -49,11 +51,12 @@ export function getColumns(actions?: TableAction<Person>[]): DataTableColumns<Pe
         return h(NTag, { type, size: 'small' }, { default: () => label })
       },
     },
-    { title: '邮箱', key: 'email', width: 200 },
-    { title: '手机号', key: 'mobile' },
+    { title: '邮箱', key: 'email', resizable: true },
+    { title: '手机号', key: 'mobile', resizable: true },
     {
       title: '是否启用',
       key: 'enabled',
+      resizable: true,
       render: (rowData) =>
         h(
           NTag,
@@ -61,8 +64,8 @@ export function getColumns(actions?: TableAction<Person>[]): DataTableColumns<Pe
           { default: () => (rowData.enabled ? '已启用' : '已禁用') },
         ),
     },
-    { title: '入职日期', key: 'joinDate' },
-    { title: '离职日期', key: 'leaveDate' },
+    { title: '入职日期', key: 'joinDate', resizable: true },
+    { title: '离职日期', key: 'leaveDate', resizable: true },
   ]
 
   handleTableActions(columns, actions)

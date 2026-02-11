@@ -7,7 +7,7 @@
             <n-input v-model:value="formData.name" clearable />
           </n-form-item-gi>
           <n-form-item-gi :span="12" label="工号" path="code">
-            <n-input v-model:value="formData.code" clearable />
+            <n-input v-model:value="formData.code" clearable :disabled="!isNew" />
           </n-form-item-gi>
           <n-form-item-gi :span="16" label="类型" path="type">
             <n-select v-model:value="formData.type" :options="personTypes" />
@@ -22,8 +22,8 @@
             <n-input v-model:value="formData.email" clearable />
           </n-form-item-gi>
           <n-form-item-gi :span="24" label="入职日期" path="joinDate">
-            <n-date-picker v-model:formatted-value="formData.joinDate" type="date" value-format="yyyy-MM-dd"
-              clearable />
+            <n-date-picker v-model:formatted-value="formData.joinDate" type="date" value-format="yyyy-MM-dd" clearable
+              disabled />
           </n-form-item-gi>
         </n-grid>
       </n-form>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef, computed } from 'vue'
 import {
   NModal,
   NForm,
@@ -67,6 +67,7 @@ const message = useMessage()
 const show = defineModel('show', { default: false })
 const formRef = useTemplateRef<FormInst>('formRef')
 const formData = defineModel<Optional<Person, 'id'>>('data', { required: true })
+const isNew = computed(() => !formData.value.id)
 const rules: FormRules = {
   name: [{ required: true, message: '请输入姓名' }],
   code: [{ required: true, message: '请输入工号' }],
